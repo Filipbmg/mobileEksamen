@@ -1,51 +1,93 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
-import { useEffect, useState } from 'react';
-import { onAuthStateChanged, User } from 'firebase/auth'
-import { firebaseAuth } from './services/firebase';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+import ManageExpense from './screens/ManageExpense';
+import RecentExpenses from './screens/RecentExpenses';
+import AllExpenses from './screens/AllExpenses';
+import { GlobalStyles } from './constants/styles';
+import { Ionicons } from '@expo/vector-icons';
+import IconButton from './components/UI/IconButton';
+import ExpensesContextProvider from './store/expenses-context';
+
+// stack const is holding an object - nav and rejustiser
 const Stack = createNativeStackNavigator();
-const [user, setUser] = useState(null);
+const BottomTabs = createBottomTabNavigator();
 
-export default function App() {
-
-  useEffect(() => {
-    onAuthStateChanged(firebaseAuth, user => {
-      console.log('user', user);
-      setUser(user);
-    });
-  }, [])
-
+function ExpensesOverview() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='LoginPage'>
-        { user ? (
-          <Stack.Screen 
-          name = 'HomePage'
-          component={HomePage}
-          options={{headerShown: false}}
-        />) 
-        : (
-          <Stack.Screen 
-            name = 'LoginPage'
-            component={LoginPage}
-            options={{headerShown: false}}
+    <BottomTabs.Navigator
+      screenOptions={({ navigation }) => ({
+        headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+        headerTintColor: 'white',
+        tabBarStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+        tabBarActiveTintColor: GlobalStyles.colors.accent500,
+        headerRight: ({ tintColor }) => (
+          <IconButton
+            icon="add"
+            size={24}
+            color={tintColor}
+            onPress={() => {
+              navigation.navigate('ManageExpense');
+            }}
           />
-        )}  
-      </Stack.Navigator>
-    </NavigationContainer>
+        ),
+      })}
+    >
+      <BottomTabs.Screen
+        name="RecentExpenses"
+        component={RecentExpenses}
+        options={{
+          title: 'Recent Expenses',
+          tabBarLabel: 'Recent',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="hourglass" size={size} color={color} />
+          ),
+        }}
+      />
+      <BottomTabs.Screen
+        name="AllExpenses"
+        component={AllExpenses}
+        options={{
+          title: 'All Expenses',
+          tabBarLabel: 'All Expenses',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="calendar" size={size} color={color} />
+          ),
+        }}
+      />
+    </BottomTabs.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <>
+      <StatusBar style="auto" />
+      <ExpensesContextProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: GlobalStyles.colors.primary500 },
+              headerTintColor: 'white',
+            }}
+          >
+            <Stack.Screen
+              name="ExpensesOverview"
+              component={ExpensesOverview}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ManageExpense"
+              component={ManageExpense}
+              options={{
+                presentation: 'modal',
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </ExpensesContextProvider>
+    </>
+  );
+}
