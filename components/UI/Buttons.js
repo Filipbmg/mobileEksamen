@@ -1,7 +1,7 @@
 import { Pressable, View, Text, StyleSheet } from 'react-native';
 import { GlobalStyles } from '../../constants/styles';
 
-function Button({ children, onPress, mode, style }) {
+export default function Button({ children, onPress, mode, style }) {
   return (
     <View style={style}>
       <Pressable
@@ -17,8 +17,6 @@ function Button({ children, onPress, mode, style }) {
     </View>
   );
 }
-
-export default Button;
 
 const styles = StyleSheet.create({
   button: {

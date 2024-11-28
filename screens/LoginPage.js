@@ -14,7 +14,6 @@ export default function LoginPage() {
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
             console.log("Login Bekræftet")
-            console.log("Her er din token " + response.user.uid)
         } catch (error) {
             console.log("Login Fejl: " + error.message);
         } finally {
@@ -30,7 +29,7 @@ export default function LoginPage() {
             alert('Registrering Bekræftet');
         } catch (error) {
             console.log("Registreringsfejl: " + error.message)
-            alert("Sign up error: " + error.message);
+            alert("Registreringsfejl: " + error.message);
         } finally {
             setLoading(false);
         }

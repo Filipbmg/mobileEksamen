@@ -1,8 +1,5 @@
 import { createContext, useReducer } from 'react';
 
-
-
-
 export const ExpensesContext = createContext({
   expenses: [],
   addExpense: ({ description, amount, date }) => {},
@@ -16,8 +13,7 @@ function expensesReducer(state, action) {
     case 'ADD':
       return [action.payload, ...state];
     case 'SET':
-      const inverted = action.payload.reverse();
-      return inverted;
+      return action.payload;
     case 'UPDATE':
       const updateableExpenseIndex = state.findIndex(
         expense => expense.id === action.payload.id
@@ -42,7 +38,8 @@ export default function ExpensesContextProvider({ children }) {
   }
 
   function setExpenses(expenses) {
-    dispatch({ type: 'SET', payload: expenses });
+    const sortedExpenses = expenses.sort((a, b) => b.date - a.date);
+    dispatch({ type: 'SET', payload: sortedExpenses });
   }
 
   function deleteExpense(id) {

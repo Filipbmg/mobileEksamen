@@ -9,7 +9,7 @@ import AllExpenses from './screens/AllExpenses';
 import { GlobalStyles } from './constants/styles';
 import { Ionicons } from '@expo/vector-icons';
 import IconButton from './components/UI/IconButton';
-import ExpensesContextProvider from './store/expenses-context';
+import ExpensesContextProvider from './store/expensesContext';
 
 // stack const is holding an object - nav and rejustiser
 const Stack = createNativeStackNavigator();
@@ -39,8 +39,8 @@ function ExpensesOverview() {
         name="RecentExpenses"
         component={RecentExpenses}
         options={{
-          title: 'Recent Expenses',
-          tabBarLabel: 'Recent',
+          title: 'Seneste 30 Dage',
+          tabBarLabel: 'Seneste',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="hourglass" size={size} color={color} />
           ),
@@ -50,8 +50,8 @@ function ExpensesOverview() {
         name="AllExpenses"
         component={AllExpenses}
         options={{
-          title: 'All Expenses',
-          tabBarLabel: 'All Expenses',
+          title: 'Alle Udgifter',
+          tabBarLabel: 'Samlet',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="calendar" size={size} color={color} />
           ),

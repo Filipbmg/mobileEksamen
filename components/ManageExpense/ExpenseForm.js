@@ -41,7 +41,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
     };
     // helper functions to validate
     const amountIsValid = !isNaN(expenseData.amount) && expenseData.amount > 0;
-    const dateIsValid = expenseData.date.toString() !== 'Invalid Date';
+    const dateIsValid = expenseData.date.toString() !== 'Ugyldig Dato';
     const descriptionIsValid = expenseData.description.trim().length > 0;
 
     // if one is not valid return and does not run onSubmit
@@ -69,11 +69,11 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
 
   return (
     <View style={styles.form}>
-      <Text style={styles.title}>Your Expense</Text>
+      <Text style={styles.title}>Din Udgift</Text>
       <View style={styles.inputsRow}>
         <Input
           style={styles.rowInput}
-          label="Amount"
+          label="Beløb"
           invalid={!inputs.amount.isValid}
           textInputConfig={{
             keyboardType: 'decimal-pad',
@@ -83,7 +83,7 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
         />
         <Input
           style={styles.rowInput}
-          label="Date"
+          label="Dato"
           invalid={!inputs.date.isValid}
           textInputConfig={{
             placeholder: 'YYYY-MM-DD',
@@ -94,24 +94,22 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
         />
       </View>
       <Input
-        label="Description"
+        label="Beskrivelse"
         invalid={!inputs.description.isValid}
         textInputConfig={{
           multiline: true,
-          // autoCaptilize: 'none'
-          // autoCorrect: false
           onChangeText: inputChangedHandler.bind(this, 'description'),
           value: inputs.description.value,
         }}
       />
       {formIsInvalid && (
         <Text style={styles.errorText}>
-          Invalid input values - please check your entered data!
+          Ugyldigt input
         </Text>
       )}
       <View style={styles.buttons}>
         <Button style={styles.button} mode="flat" onPress={onCancel}>
-          Cancel
+          Annuller
         </Button>
         <Button style={styles.button} onPress={submitHandler}>
           {submitButtonLabel}

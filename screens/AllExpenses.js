@@ -1,7 +1,7 @@
 import { Text, StyleSheet } from 'react-native';
 import { useContext } from 'react';
 import ExpensesOutput from '../components/ExpensesOutput/ExpensesOutput';
-import { ExpensesContext } from '../store/expenses-context';
+import { ExpensesContext } from '../store/expensesContext';
 
 export default function AllExpenses() {
   const expensesContext = useContext(ExpensesContext);
@@ -9,7 +9,7 @@ export default function AllExpenses() {
     <ExpensesOutput
       expenses={expensesContext.expenses}
       expensesPeriod="Total"
-      fallbackText="No registered expenses found!"
+      fallbackText="Ingen udgifter fundet"
     />
   );
 }

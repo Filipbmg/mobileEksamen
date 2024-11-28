@@ -2,71 +2,62 @@ import { View, StyleSheet, TextInput } from 'react-native';
 import { useLayoutEffect, useContext, useState } from 'react';
 import IconButton from '../components/UI/IconButton';
 import { GlobalStyles } from '../constants/styles';
-import { ExpensesContext } from '../store/expenses-context';
+import { ExpensesContext } from '../store/expensesContext';
 import ExpenseForm from '../components/ManageExpense/ExpenseForm';
-import { storeExpense, updateExpense, deleteExpense } from '../utils/http';
+import { storeExpense, updateExpense, deleteExpense } from '../utils/crud';
 import LoadingOverlay from '../components/UI/LoadingOverlay';
-import ErrorOverlay from '../components/UI/ErrorOverlay';
 
-function ManageExpense({ route, navigation }) {
-  // using state for activity indicator
+export default function ManageExpense({ route, navigation }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState();
-  const expensesCtx = useContext(ExpensesContext);
+  const expensesContext = useContext(ExpensesContext);
 
-  const editedExpenseId = route.params?.expenseId;
-  // converting val into boolean !!
-  const isEditing = !!editedExpenseId;
-  //finding selected expense data to display on edit
-  const selectedExpense = expensesCtx.expenses.find(
-    expense => expense.id === editedExpenseId
+  const selectedExpenseId = route.params?.expenseId;
+
+  // Boolean conversion
+  const isEditing = !!selectedExpenseId;
+
+  const selectedExpense = expensesContext.expenses.find(
+    expense => expense.id === selectedExpenseId
   );
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: isEditing ? 'Edit Expense' : 'Add Expense',
+      title: isEditing ? 'Rediger Udgift' : 'Tilføj Udgift',
     });
   }, [navigation, isEditing]);
 
   async function deleteExpenseHandler() {
     setIsSubmitting(true);
     try {
-      await deleteExpense(editedExpenseId);
-      expensesCtx.deleteExpense(editedExpenseId);
+      await deleteExpense(selectedExpenseId);
+      expensesContext.deleteExpense(selectedExpenseId);
       navigation.goBack();
     } catch (error) {
-      setError('Could not delete expense - please try again later!');
+      setError('Udgift kunne ikke slettes');
       setIsSubmitting(false);
     }
-    // built in method to close modal
   }
 
   function cancelHandler() {
     navigation.goBack();
   }
 
-  async function confirmHandler(expenseData) {
+  async function confirmHandler(expenseData) { 
     setIsSubmitting(true);
     try {
       if (isEditing) {
-        // updating locally first
-        expensesCtx.updateExpense(editedExpenseId, expenseData);
-        // then send request
-        await updateExpense(editedExpenseId, expenseData);
+        // Local update first
+        expensesContext.updateExpense(selectedExpenseId, expenseData);
+
+        await updateExpense(selectedExpenseId, expenseData);
       } else {
         const id = await storeExpense(expenseData);
-        expensesCtx.addExpense({ ...expenseData, id: id });
       }
-      // closing modal
       navigation.goBack();
     } catch (error) {
-      setError('Could not save data - please try again!');
+      setError('Data kunne ikke gemmes');
       setIsSubmitting(false);
     }
-  }
-
-  if (error && !isSubmitting) {
-    return <ErrorOverlay message={error} />;
   }
 
   if (isSubmitting) {
@@ -76,7 +67,7 @@ function ManageExpense({ route, navigation }) {
   return (
     <View style={styles.container}>
       <ExpenseForm
-        submitButtonLabel={isEditing ? 'Update' : 'Add'}
+        submitButtonLabel={isEditing ? 'Opdater' : 'Tilføj'}
         onSubmit={confirmHandler}
         onCancel={cancelHandler}
         defaultValues={selectedExpense}
@@ -94,8 +85,6 @@ function ManageExpense({ route, navigation }) {
     </View>
   );
 }
-
-export default ManageExpense;
 
 const styles = StyleSheet.create({
   container: {
