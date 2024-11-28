@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { GlobalStyles } from '../../constants/styles';
 import { getFormattedDate } from '../../utils/date';
 
-function ExpenseItem({ id, description, amount, date }) {
+export default function ExpenseItem({ id, description, amount, date }) {
   const navigation = useNavigation();
 
   function expensePressHandler() {
@@ -30,8 +30,6 @@ function ExpenseItem({ id, description, amount, date }) {
     </Pressable>
   );
 }
-
-export default ExpenseItem;
 
 const styles = StyleSheet.create({
   expenseItem: {

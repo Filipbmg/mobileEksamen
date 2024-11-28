@@ -5,7 +5,7 @@ function renderExpenseItem(itemData) {
   return <ExpenseItem {...itemData.item} />;
 }
 
-function ExpensesList({ expenses }) {
+export default function ExpensesList({ expenses }) {
   return (
     <FlatList
       data={expenses}
@@ -14,7 +14,3 @@ function ExpensesList({ expenses }) {
     />
   );
 }
-
-export default ExpensesList;
-
-const styles = StyleSheet.create({});

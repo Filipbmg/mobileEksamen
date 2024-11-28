@@ -46,7 +46,7 @@ export default function ManageExpense({ route, navigation }) {
     setIsSubmitting(true);
     try {
       if (isEditing) {
-        // Local update first
+        // Local update
         expensesContext.updateExpense(selectedExpenseId, expenseData);
 
         await updateExpense(selectedExpenseId, expenseData);

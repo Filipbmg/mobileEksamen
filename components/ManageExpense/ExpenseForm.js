@@ -6,8 +6,7 @@ import Button from '../UI/Buttons';
 import { getFormattedDate } from '../../utils/date';
 import { GlobalStyles } from '../../constants/styles';
 
-function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
-  // defaultValues is a prop from manageExpenses
+export default function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
   const [inputs, setInputs] = useState({
     amount: {
       value: defaultValues ? defaultValues.amount.toString() : '',
@@ -118,8 +117,6 @@ function ExpenseForm({ submitButtonLabel, onCancel, onSubmit, defaultValues }) {
     </View>
   );
 }
-
-export default ExpenseForm;
 
 const styles = StyleSheet.create({
   inputsRow: {
